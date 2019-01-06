@@ -1,0 +1,99 @@
+#include<iostream>
+using namespace std;
+class Node {
+public:
+	int data; //数值
+	int seat; //位置
+	Node *pNext;
+};
+class Operate {
+private:
+	Node *head;
+public:
+	Operate() {
+		head = new Node;
+		head->data = 0;
+		head->pNext = NULL;
+	}
+public:
+	void creatNewNode(int n); 
+	void operateNode(int n, unsigned int s, unsigned int m);
+};
+void Operate::creatNewNode(int n) {	//创建结点
+	Node *pnew, *ptemp;
+	ptemp = head;
+	cout << "输入第1个结点的值:";
+	cin >> head->data;
+	ptemp->seat = 1;
+	cout << "这个人的值是  " << ptemp->data;
+	cout << "  这个人的座位是" << ptemp->seat << endl;
+	for (int i = 2; i <= n; i++) {
+		pnew = new Node;
+		cout << "输入第" << i << "个结点的值：";
+		cin >> pnew->data;
+		pnew->seat = i;
+		cout << "这个人的值是  " << pnew->data;
+		cout << "  这个人的座位是  " << pnew->seat << endl;
+		pnew->pNext = NULL;
+		ptemp->pNext = pnew;
+		ptemp = pnew;
+	}
+	ptemp->pNext = head;
+}
+void Operate::operateNode(int n, unsigned int s, unsigned int m) {	//对结点的操作
+	Node *ptemp = head; //先将操作指针指向head结点
+	while (ptemp->seat != s) {//找到需要操作的结点位置
+		ptemp = ptemp->pNext;
+	}
+	cout << "当前查找的是: " << ptemp->seat << "当前的数值为: " << ptemp->data << endl;
+	Node *p1, *p2 = NULL, *pdelete;
+	int count;
+	p1 = ptemp;
+	//n个结点执行n-1次循环
+	for (int i = 1; i <= n - 1; i++) {
+		count = 1;
+		while (count < m) {
+			p2 = p1;
+			p1 = p1->pNext;
+			count++;
+		}
+		cout << p1->seat << "\t"; //这是当前要删除的人
+		pdelete = p1;     //pdelete指向当前这个人
+		p2->pNext = p1->pNext;
+		p1 = p1->pNext; //最终指向head结点
+		delete pdelete;
+	}
+	cout << endl;
+	cout << "最后一个人的座位是：" << p1->seat << endl;
+	cout << "最后一个人的数值是：" << p1->data << endl;
+}
+int main()
+{
+	Operate Y;
+	unsigned int n; //结点数
+	unsigned int m; //数的数字
+	unsigned int s; //seat号
+	cout << "请输入要创建的结点个数 n:";
+	cin >> n;
+	cout << "请输入要开始的座位序号 s:";
+	cin >> s;
+	//判断输入座位号是不是比所建立的结点数多
+	if (s > n)
+	{
+		cout << "输入错误" << endl;
+		exit(0);
+	}
+	cout << "请输入要数的数字 m:";
+	//输入要数的间隔
+	cin >> m;
+	if (n && m && s)
+		Y.creatNewNode(n);
+	else
+	{
+		cout << "输入错误" << endl;
+		exit(0);
+	}
+	Y.operateNode(n, s, m);
+	system("pause");
+	return 0;
+}
